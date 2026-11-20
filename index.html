@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in · Contract Monitoring Dashboard FY27</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/login.css">
+<script src="js/auth.js"></script>
+</head>
+<body class="login-page">
+<main class="login-card">
+  <div class="brand" aria-hidden="true">
+    <svg width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" rx="10" fill="#1F3A5F"/><path d="M10 28V18m7 10V12m7 16V21m7 7V15" stroke="#fff" stroke-width="3.2" stroke-linecap="round" fill="none"/></svg>
+  </div>
+  <h1>Contract Monitoring Dashboard</h1>
+  <p class="sub">FY27 · Please sign in to continue</p>
+
+  <form id="loginForm" novalidate>
+    <label for="user">Username</label>
+    <input id="user" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus>
+
+    <label for="pass">Password</label>
+    <div class="pw">
+      <input id="pass" name="password" type="password" autocomplete="current-password" required>
+      <button id="toggle" type="button" aria-label="Show password" aria-pressed="false">Show</button>
+    </div>
+
+    <p id="msg" class="msg" role="alert" aria-live="assertive"></p>
+    <button id="submit" type="submit" class="primary wide">Sign in</button>
+  </form>
+  <p class="muted foot">Authorized users only. Contact the dashboard owner if you need access.</p>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  if (Auth.user()) { location.replace('dashboard.html'); return; }
+  var $ = function (id) { return document.getElementById(id); };
+  var msg = $('msg'), btn = $('submit'), timer = null;
+
+  function say(t) { msg.textContent = t || ''; }
+  function lockUi() {
+    var left = Auth.lockLeft();
+    if (left > 0) {
+      btn.disabled = true; say('Too many failed attempts. Try again in ' + left + ' s.');
+      clearTimeout(timer); timer = setTimeout(lockUi, 1000);
+    } else { btn.disabled = false; if (/Too many/.test(msg.textContent)) say(''); }
+  }
+  lockUi();
+
+  $('toggle').onclick = function () {
+    var show = $('pass').type === 'password';
+    $('pass').type = show ? 'text' : 'password';
+    this.textContent = show ? 'Hide' : 'Show';
+    this.setAttribute('aria-pressed', String(show));
+    this.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+  };
+
+  $('loginForm').onsubmit = function (e) {
+    e.preventDefault();
+    if (Auth.lockLeft() > 0) { lockUi(); return; }
+    var u = $('user').value, p = $('pass').value;
+    if (!u.trim() || !p) { say('Please enter your username and password.'); (u.trim() ? $('pass') : $('user')).focus(); return; }
+    btn.disabled = true; btn.textContent = 'Signing in…'; say('');
+    Auth.login(u, p).then(function (ok) {
+      if (ok) { location.replace('dashboard.html'); return; }
+      say('Incorrect username or password.'); $('pass').value = ''; $('pass').focus();
+    }).catch(function () {
+      say('Sign-in is not available in this browser. Open the site over https (or localhost).');
+    }).then(function () { btn.textContent = 'Sign in'; lockUi(); });
+  };
+})();
+</script>
+</body>
+</html>

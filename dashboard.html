@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contract Monitoring Dashboard FY27</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="js/auth.js"></script>
+<script>Auth.require();</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js" defer></script>
+<script src="js/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div><h1 id="title">Contract Monitoring Dashboard FY27</h1><p id="sync" class="muted">Loading…</p></div>
+    <div class="tools">
+      <label>PIC <select id="picSel"></select></label>
+      <label>Period <select id="period"></select></label>
+      <button id="reset" type="button">Reset (All PIC)</button>
+      <button id="refresh" type="button" class="primary">Refresh Data</button>
+      <span id="whoami" class="muted"></span>
+      <button id="logout" type="button">Sign out</button>
+    </div>
+  </header>
+  <div id="pics" class="pics"></div>
+
+  <div id="cardsQ" class="cards"></div>
+  <div class="grid">
+    <section class="panel s8 tall"><h2>Quotation Map <small>size = value · color = progress</small></h2>
+      <div class="mapwrap"><canvas id="cMap"></canvas></div>
+      <p class="legend"><i style="background:#DC2626"></i>&lt; 40% <i style="background:#F59E0B"></i>40–79% <i style="background:#16A34A"></i>≥ 80%</p>
+      <div id="mapCards" class="cards mini"></div></section>
+    <section class="panel s4"><h2>Progress per Stage</h2><div class="cv"><canvas id="cStage"></canvas></div></section>
+    <section class="panel s4"><h2>Average Progress per PIC</h2><div class="cv"><canvas id="cAvg"></canvas></div></section>
+  </div>
+
+  <h2 class="sec">Total Revenue (Booked)</h2>
+  <div id="cardsR" class="cards"></div>
+  <div class="grid">
+    <section class="panel s6"><h2>Revenue vs Target Booked per Period</h2><div class="cv"><canvas id="cPer"></canvas></div></section>
+    <section class="panel s6"><h2>Revenue per PIC</h2><div class="cv"><canvas id="cPic"></canvas></div></section>
+    <section class="panel s6"><h2>Value Composition per Status</h2><div class="cv"><canvas id="cStat"></canvas></div></section>
+    <section class="panel s6"><h2>Revenue per Quarter (Q1–Q4)</h2><div class="cv"><canvas id="cQtr"></canvas></div></section>
+  </div>
+
+  <section class="panel"><h2>Service Contracts <small>active equipment · follows PIC filter</small></h2>
+    <div class="svc">
+      <div class="donut"><canvas id="cSvc"></canvas><div id="svcTotal" class="center"></div></div>
+      <div id="svcLegend"></div>
+      <div id="svcPanel"></div>
+    </div></section>
+
+  <section class="panel"><h2>Quotation Detail <small id="tblInfo"></small></h2>
+    <div class="tblwrap"><table id="tbl"></table></div></section>
+  <p class="muted foot">Data comes from data/data.json and reloads automatically every 10 minutes.</p>
+</div>
+</body>
+</html>

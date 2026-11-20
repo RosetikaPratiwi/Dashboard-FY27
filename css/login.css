@@ -1,0 +1,14 @@
+.login-page{min-height:100vh;display:grid;place-items:center;padding:16px;background:linear-gradient(160deg,#E8EEF7 0%,var(--bg) 55%)}
+.login-card{width:100%;max-width:380px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 26px 22px;box-shadow:0 10px 30px rgba(31,58,95,.10)}
+.login-card .brand{margin-bottom:10px}
+.login-card h1{font-size:1.3rem}
+.login-card .sub{margin:4px 0 20px;color:var(--muted)}
+.login-card label{display:block;font-weight:600;font-size:.82rem;margin:12px 0 4px;color:var(--navy)}
+.login-card input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+.login-card input:focus-visible{outline:3px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.pw{position:relative}.pw input{padding-right:64px}
+.pw button{position:absolute;right:4px;top:4px;bottom:4px;padding:0 10px;border:0;background:transparent;color:var(--blue);font-weight:600;font-size:.8rem}
+.msg{min-height:1.3em;margin:10px 0 6px;color:var(--red);font-size:.82rem}
+.wide{width:100%;padding:10px 12px;font-weight:600}
+button.primary:disabled{opacity:.6;cursor:not-allowed}
+.login-card .foot{text-align:center;margin:16px 0 0}
